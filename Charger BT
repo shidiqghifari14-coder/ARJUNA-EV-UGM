@@ -93,10 +93,11 @@ void initNextionDisplay(){
   sendToNextion("x_voltage.val=0");
   sendToNextion("x_current.val=0");
   sendToNextion("n_current.val=0");
-  sendToNextion("t_status.txt=\"IDLE\"");
-  sendToNextion("t_error.txt=\"OK\"");  
-  
-  
+  sendToNextion("t_status.pco=65535");
+  sendToNextion("t_status.txt=\"IDLE STATE\"");
+  sendToNextion("t_error.pco=2016");
+  sendToNextion("t_error.txt=\"STATUS OK\"");
+
   sendToNextion("page2");
   delay(100);
   sendToNextion("n_current.val=0");
@@ -162,8 +163,8 @@ void onReceive(const CAN_message_t &msg) {
   Serial.print("LEN: "); Serial.print(msg.len, HEX);
   Serial.print(" ID: "); Serial.print(msg.id, HEX);
   Serial.print(" Buffer: ");
-  SerialBT.print ("LEN: "); Serial.print(msg.len, HEX);
-  SerialBT.print(" ID: "); Serial.print(msg.id, HEX);
+  SerialBT.print ("LEN: "); SerialBT.print(msg.len, HEX);
+  SerialBT.print(" ID: "); SerialBT.print(msg.id, HEX);
   SerialBT.print(" Buffer: ");
 
   for ( uint8_t i = 0; i < msg.len; i++ ) {
@@ -180,7 +181,7 @@ void onReceive(const CAN_message_t &msg) {
   decodeErrorFlags();
 
   String receiveData = "VOLTAGE = " + String(mergeV) + "CURRENT = " + String(mergeC) + "ERR = " + String (errFlag, BIN);
-  SerialBT.print(receiveData);
+  // SerialBT.print(receiveData);
   SerialBT.println(receiveData);
 
   Serial.print("VOLTAGE: ");Serial.println(mergeV);
@@ -195,6 +196,7 @@ void onReceive(const CAN_message_t &msg) {
 void decodeErrorFlags(){
 // Bit0: Hardware Failure
   if (bitRead(errFlag, 0) == 1 ){
+    Serial.print("Hardware Failure");
     SerialBT.print("Hardware Failure");
   } 
   // Bit1: Temperature of Charger
