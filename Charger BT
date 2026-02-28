@@ -313,10 +313,10 @@ void loop() {
     t=millis();
     // handleNextionInput();
       if(stopCharg == 1){
-    SerialBT.println("START CHARGING");
+    SerialBT.println("STOP CHARGING");
     }
       else if(stopCharg == 0){
-    SerialBT.println("STOP CHARGING");
+    SerialBT.println("START CHARGING");
     }
     SerialBT.print("Sent Data -> ID: ");
     SerialBT.print(msg.id, HEX);
